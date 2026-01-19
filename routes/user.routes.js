@@ -52,11 +52,12 @@ router.post(
         { expiresIn: "7d" }
       );
 
-      // ✅ COOKIE SET HERE (REGISTER)
+      // ✅ COOKIE SET HERE (REGISTER) - FIXED FOR DEPLOY
+      const isProd = process.env.NODE_ENV === "production";
       res.cookie("token", token, {
         httpOnly: true,
-        secure: false, // localhost => false
-        sameSite: "lax",
+        secure: isProd, // ✅ Render HTTPS => true
+        sameSite: isProd ? "none" : "lax", // ✅ cross-site cookie allow in prod
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
@@ -136,18 +137,16 @@ router.post(
         { expiresIn: "7d" }
       );
 
-      //  COOKIE SET HERE (LOGIN)
+      // ✅ COOKIE SET HERE (LOGIN) - FIXED FOR DEPLOY
+      const isProd = process.env.NODE_ENV === "production";
       res.cookie("token", token, {
         httpOnly: true,
-        secure: false,
-        sameSite: "lax",
+        secure: isProd,
+        sameSite: isProd ? "none" : "lax",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
-      return res.json({
-        message: "login success",
-        token,
-      });
+      return res.redirect("/");
     } catch (error) {
       return res.status(500).json({
         message: "Server error",
@@ -157,7 +156,7 @@ router.post(
   }
 );
 
-//  LOGOUT (cookie clear)
+// ------------------ LOGOUT ------------------
 router.get("/logout", (req, res) => {
   res.clearCookie("token");
   return res.json({ message: "logout done" });
