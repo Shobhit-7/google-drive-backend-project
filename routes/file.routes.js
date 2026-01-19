@@ -19,7 +19,7 @@ router.post("/delete-file/:id", isLoggedIn, async (req, res) => {
       resource_type: "auto",
     });
 
-    // ✅ delete from db
+   
     await File.deleteOne({ _id: fileId });
 
     return res.redirect("/?success=deleted");

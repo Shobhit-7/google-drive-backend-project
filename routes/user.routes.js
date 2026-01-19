@@ -7,7 +7,7 @@ const userModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-// ------------------ REGISTER ------------------
+
 router.get("/register", (req, res) => {
   res.render("register");
 });
@@ -52,12 +52,12 @@ router.post(
         { expiresIn: "7d" }
       );
 
-      // ✅ COOKIE SET HERE (REGISTER) - FIXED FOR DEPLOY
+      
       const isProd = process.env.NODE_ENV === "production";
       res.cookie("token", token, {
         httpOnly: true,
-        secure: isProd, // ✅ Render HTTPS => true
-        sameSite: isProd ? "none" : "lax", // ✅ cross-site cookie allow in prod
+        secure: isProd, 
+        sameSite: isProd ? "none" : "lax", 
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
@@ -85,7 +85,7 @@ router.post(
   }
 );
 
-// ------------------ LOGIN ------------------
+
 router.get("/login", (req, res) => {
   res.render("login");
 });
@@ -137,7 +137,7 @@ router.post(
         { expiresIn: "7d" }
       );
 
-      // ✅ COOKIE SET HERE (LOGIN) - FIXED FOR DEPLOY
+      
       const isProd = process.env.NODE_ENV === "production";
       res.cookie("token", token, {
         httpOnly: true,
@@ -156,7 +156,7 @@ router.post(
   }
 );
 
-// ------------------ LOGOUT ------------------
+
 router.get("/logout", (req, res) => {
   res.clearCookie("token");
   return res.json({ message: "logout done" });
